@@ -216,8 +216,6 @@
         let guy = { x: 380, y: 150, w: 20, h: 32 };
         let keys = {};
         let cutsceneTimer = 0;
-        let subState = 0;
-        let fadeAlpha = 0;
 
         window.addEventListener('keydown', e => keys[e.key] = true);
         window.addEventListener('keyup', e => keys[e.key] = false);
@@ -238,7 +236,6 @@
             dpad.style.display = 'block';
         });
 
-        // Ocultamiento directo instantáneo al presionar opciones
         document.getElementById('opt-1').addEventListener('click', (e) => {
             e.stopPropagation();
             optionsModal.classList.add('hide-modal');
@@ -270,35 +267,30 @@
             let height = isShort ? 24 : 32;
             let width = isShort ? 16 : 20;
 
-            // Cuerpo/Ropa
             if(isGirl) {
-                ctx.fillStyle = '#800020'; // Chomba bordó
+                ctx.fillStyle = '#800020';
                 ctx.fillRect(x+2, y+10, width-4, 10);
-                ctx.fillRect(x, y+20, width, 6); // Falda bordó
+                ctx.fillRect(x, y+20, width, 6);
             } else {
-                ctx.fillStyle = '#800020'; // Chomba bordó
+                ctx.fillStyle = '#800020';
                 ctx.fillRect(x+2, y+10, width-4, 10);
-                ctx.fillStyle = '#707070'; // Pantalón gris
+                ctx.fillStyle = '#707070';
                 ctx.fillRect(x+3, y+20, width-6, 8);
             }
             
-            // Zapatos
             ctx.fillStyle = '#111';
             ctx.fillRect(x+2, y+height-4, 5, 4);
             ctx.fillRect(x+width-7, y+height-4, 5, 4);
 
-            // Cabeza
             ctx.fillStyle = skinTone;
-            ctx.fillRect(x+3, y, width-6, 10);
+            ctx.fillRect(x+3, y+2, width-6, 8);
 
-            // Cabello Negro Corto
             ctx.fillStyle = '#111';
-            ctx.fillRect(x+2, y-2, width-4, 5);
-            ctx.fillRect(x+1, y, 3, 8);
-            ctx.fillRect(x+width-4, y, 3, 8);
+            ctx.fillRect(x+2, y, width-4, 4);
+            ctx.fillRect(x+1, y+2, 3, 6);
+            ctx.fillRect(x+width-4, y+2, 3, 6);
         }
 
-        // Burbujas nítidas de alta legibilidad
         function drawVectorBubble(text, x, y, width=140) {
             ctx.save();
             ctx.fillStyle = '#ffffff';
@@ -361,7 +353,7 @@
             }
 
             else if(gameState === 'INTERACTIVE_MEET' || gameState === 'CHOICE_MENU') {
-                ctx.fillStyle = '#e2f0d9'; // Césped
+                ctx.fillStyle = '#e2f0d9';
                 ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
 
                 drawChar(guy.x, guy.y, false);
@@ -396,16 +388,15 @@
                 ctx.fillStyle = '#a9dfbf';
                 ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
 
-                drawChar(150, 140, true, '#ffe0bd');
-                drawChar(210, 140, true, '#ffe0bd');
-                drawChar(270, 140, true, '#8d5524'); // Amiga piel oscura
+                drawChar(150, 140, true, '#ffe0bd'); // Amiga 1
+                drawChar(210, 140, true, '#ffe0bd'); // Protagonista (la del medio)
+                drawChar(270, 140, true, '#8d5524'); // Amiga 3 (piel oscura)
 
+                // Solo la protagonista (la del medio, en x: 210) dice "Me enamoré!" y tiene un corazón arriba
                 if(cutsceneTimer < 90) {
-                    drawVectorBubble("Me enamoré!", 140, 95, 100);
+                    drawVectorBubble("Me enamoré!", 165, 95, 100);
                 } else {
-                    drawHeart(160, 110, 10);
-                    drawHeart(220, 110, 10);
-                    drawHeart(280, 110, 10);
+                    drawHeart(220, 110, 12);
                 }
 
                 if(cutsceneTimer > 150) {
@@ -421,7 +412,7 @@
 
                 drawChar(140, 140, false); 
                 drawChar(220, 140, false); 
-                drawChar(300, 148, false, '#ffe0bd', true); // Amigo más pequeño
+                drawChar(300, 148, false, '#ffe0bd', true);
 
                 if(cutsceneTimer < 60) {
                     drawVectorBubble("Me enamoré bld", 90, 95, 120);
@@ -446,7 +437,6 @@
                 ctx.fillStyle = '#1a1a2e';
                 ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
 
-                // Celular Nítido
                 ctx.save();
                 ctx.fillStyle = '#333';
                 ctx.strokeStyle = '#555';
@@ -491,7 +481,6 @@
                 ctx.fillStyle = '#2c3e50';
                 ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
 
-                // Cama
                 ctx.fillStyle = '#ecf0f1';
                 ctx.fillRect(100, 160, 120, 40);
                 drawChar(120, 150, false); 
@@ -557,7 +546,6 @@
                 ctx.textAlign = 'center';
                 ctx.fillText("TE AMO MI GORDITA HERMOSA", V_WIDTH/2, V_HEIGHT/2);
 
-                // Duración exacta de 2 segundos (120 frames a 60fps)
                 if(cutsceneTimer > 120) {
                     gameState = 'FINAL_DATE';
                     cutsceneTimer = 0;
@@ -573,9 +561,8 @@
                 ctx.textAlign = 'center';
                 ctx.fillText("14/04/26", V_WIDTH/2, V_HEIGHT/2);
 
-                // Se mantiene la fecha final por 2 segundos también (120 frames)
                 if(cutsceneTimer > 120) {
-                    // Fin del flujo
+                    // Fin
                 }
             }
         }
